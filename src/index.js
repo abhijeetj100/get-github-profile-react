@@ -48,7 +48,7 @@ ReactDOM.render(
     {/* <App /> */}
     {/* <ComponentOne />
     <ComponentTwo /> */}
-    <HeaderComponent title="GitHub Profile" className="title_class" />
+    <HeaderComponent title="GitHub Profile!" className="title_class" />
     <GetUserProfile />
   </>,
   rootElement
