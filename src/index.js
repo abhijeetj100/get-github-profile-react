@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 
 // import App from "./App";
 import GetUserProfile, { HeaderComponent } from "./GetUserProfile";
+import { Checkbox } from "./UtilityFunctionComponents";;
 
 // function ComponentOne() {
 //   const [state, setState] = useState("false");
@@ -50,6 +51,7 @@ ReactDOM.render(
     <ComponentTwo /> */}
     <HeaderComponent title="GitHub Profile!" className="title_class" />
     <GetUserProfile />
+    <Checkbox />
   </>,
   rootElement
 );
