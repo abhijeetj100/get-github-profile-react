@@ -1,46 +1,73 @@
 // import { StrictMode } from "react";
 import ReactDOM from "react-dom";
+import {useState, useEffect} from 'react';
 // import "./styles.css";
 
 // import App from "./App";
 import GetUserProfile, { HeaderComponent } from "./GetUserProfile";
 
-// function ComponentOne() {
-//   const [state, setState] = useState("false");
-//   const [state2, setState2] = useState("am i reset?");
-//   // useEffect(() => {
-//   //   console.log("ComponentOne re-rendered!!! 1");
-//   // });
-//   console.log("ComponentOne re-rendered!!! (1)", state);
+function Example() {
+  // Declare a new state variable, which we'll call "count"
+  const [count, setCount] = useState(0);
+  const [count2, setCount2] = useState(1);
 
-//   return (
-//     <>
-//       <h1>
-//         {" "}
-//         From Component_one:- {state} {state2}
-//       </h1>
-//       <button onClick={() => setState("true")}>Change state</button>
-//       <button onClick={() => setState2("value has been reset")}>
-//         Change reset status
-//       </button>
-//     </>
-//   );
-// }
+  console.log("EXAMPLE COMPONENT RENDERED");
 
-// function ComponentTwo() {
-//   // const [state, setState] = useState("false");
-//   useEffect(() => {
-//     // console.log("ComponentTwo re-rendered!!! 2");
-//   });
-//   // console.log("ComponentTwo re-rendered!!! (2)");
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Update the document title using the browser API
+    console.log("CALLED DURING FIRST RENDER", count, count2);;
+    document.title = `You clicked ${count2} times`;
+    return () =>{
+      console.log("DESTRRUCTURING?", count, count2);
+    }
+  }, [count, count2]);
 
-//   return (
-//     <>
-//       <h1> From Component_two</h1>
-//       {/* <button onClick={() => setState("true")}>Change state</button> */}
-//     </>
-//   );
-// }
+  return (
+    <div>
+      <p>You clicked {count2} times</p>
+      <button onClick={() => {setCount2(count2+1); setCount(count+1)}}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+//CUSTOM HOOK
+function useFriendStatus(friendID) {
+  const [isOnline, setIsOnline] = useState(null);
+
+  useEffect(() => {
+    function handleStatusChange(status) {
+      setIsOnline(status.isOnline);
+    }
+
+    ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
+    return () => {
+      ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
+    };
+  });
+
+  return isOnline;
+}
+
+function FriendStatus(props) {
+  const isOnline = useFriendStatus(props.friend.id);
+
+  if (isOnline === null) {
+    return 'Loading...';
+  }
+  return isOnline ? 'Online' : 'Offline';
+}
+function FriendListItem(props) {
+  const isOnline = useFriendStatus(props.friend.id);
+
+  return (
+    <li style={{ color: isOnline ? 'green' : 'black' }}>
+      {props.friend.name}
+    </li>
+  );
+}
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
@@ -50,6 +77,7 @@ ReactDOM.render(
     <ComponentTwo /> */}
     <HeaderComponent title="GitHub Profile" className="title_class" />
     <GetUserProfile />
+    <Example />
   </>,
   rootElement
 );
